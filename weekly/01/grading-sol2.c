@@ -1,9 +1,11 @@
 #include <stdio.h>
 
 int main() {
-    int score;
-    scanf("%d", &score);
+    int a, b, c;
+    scanf("%d%d%d", &a, &b, &c);
 
+    int score = a + b + c;
+    
     if (score >= 80 && score <= 100) {
         printf("A");
     } else if (score >= 75 && score < 80) {
