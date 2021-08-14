@@ -31,3 +31,7 @@
 *.exe
 *.out
 *.app
+
+# VS Code
+tempCodeRunnerFile.c
+.vscode/
