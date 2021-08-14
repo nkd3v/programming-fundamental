@@ -1,9 +1,7 @@
 #include <stdio.h>
 
-int main()
-{
-  for (int n = 1, init = 1; n <= 10000; n++) {
-    
+int main() {
+  for (int n = 1; n <= 10000; n++) {
     int sum = 0;
 
     for (int i = 1; i < n; i++) {
@@ -11,9 +9,9 @@ int main()
     }
 
     if (sum == n) {
-      if (!init) printf(", ");
-      printf("%d", n);
-      init = 0;
+      printf("%d\n", n);
     }
   }
+
+  return 0;
 }

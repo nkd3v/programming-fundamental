@@ -6,36 +6,50 @@
 
 #define MIN_X 0
 #define MAX_X 80
-
 #define MIN_Y 0
-#define MAX_Y 100
+#define MAX_Y 25
 
-void gotoxy();
-void draw_ship();
+void gotoxy(int &x, int &y);
+void draw_ship(int &x, int &y);
+void erase_ship(int &x, int &y);
+void move_ship(int &x, int &y, int dx, int dy);
+void bnd_change(int &x, int &y, int dx, int dy);
 
-void gotoxy(int x, int y)
-{
-  COORD c = { x, y };
+void gotoxy(int &x, int &y) {
+  COORD c = { (SHORT)x, (SHORT)y };
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
-void draw_ship(int x, int y)
-{
+void draw_ship(int &x, int &y) {
   gotoxy(x, y);
-  printf(" <-0-> ");
+  printf("<-0->");
 }
 
-void bnd_change(int &val, int delta) {
-  int nval = val + delta;
-  if (nval < MIN_X || nval > MAX_X
-      || nval < MIN_Y || nval > MAX_Y) {
-    return;
+void erase_ship(int &x, int &y) {
+  gotoxy(x, y);
+  printf("     ");
+}
+
+void move_ship(int &x, int &y, int dx, int dy) {
+  erase_ship(x, y);
+  bnd_change(x, y, dx, dy);
+  draw_ship(x, y);
+}
+
+void bnd_change(int &x, int &y, int dx, int dy) {
+  int nx = x + dx;
+  int ny = y + dy;
+
+  if (nx >= MIN_X && nx <= MAX_X) {
+    x = nx;
   }
-  val = nval;
+
+  if (ny >= MIN_Y && ny <= MAX_Y) {
+    y = ny;
+  }
 }
 
-int main()
-{
+int main() {
   char ch = ' ';
   int x = 38, y = 20;
   draw_ship(x, y);
@@ -43,14 +57,20 @@ int main()
   do {
     if (_kbhit()) {
       ch = _getch();
-      if (ch == 'a') {
-        bnd_change(x, -1);
-        draw_ship(x, y);
+
+      if (ch == 'w') {
+        move_ship(x, y, 0, -1);
+      } else if (ch == 's') {
+        move_ship(x, y, 0, 1);
+      } else if (ch == 'a') {
+        move_ship(x, y, -1, 0);
       } else if (ch == 'd') {
-        bnd_change(x, 1);
-        draw_ship(x, y);
+        move_ship(x, y, 1, 0);
       }
+
+      fflush(stdin);
     }
+
     Sleep(DTIME);
   } while (ch != 'x');
 

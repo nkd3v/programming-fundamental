@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int main()
-{
+int main() {
   int n;
   scanf("%d", &n);
 
@@ -12,7 +11,9 @@ int main()
       sum += n % 10;
       n /= 10;
     }
+    printf("%d\n", sum);
     n = sum;
-    printf("%d\n", n);
   }
+
+  return 0;
 }
