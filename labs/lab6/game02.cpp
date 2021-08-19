@@ -11,15 +11,6 @@
 
 #define BULLET_COUNT 5
 
-void setcursor(bool visible);
-void setcolor(int fg,int bg);
-
-void gotoxy(int &x, int &y);
-void draw_ship(int &x, int &y);
-void erase_ship(int &x, int &y);
-void move_ship(int &x, int &y, int dx, int dy);
-void bnd_change(int &x, int &y, int dx, int dy);
-
 void setcursor(bool visible) {
   HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
   CONSOLE_CURSOR_INFO lpCursor;
@@ -50,27 +41,8 @@ void erase_ship(int &x, int &y) {
   printf("     ");
 }
 
-void move_ship(int &x, int &y, int dx, int dy) {
-  erase_ship(x, y);
-  bnd_change(x, y, dx, dy);
-  draw_ship(x, y);
-}
-
-void bnd_change(int &x, int &y, int dx, int dy) {
-  int nx = x + dx;
-  int ny = y + dy;
-
-  if (nx >= MIN_X && nx <= MAX_X) {
-    x = nx;
-  }
-
-  if (ny >= MIN_Y && ny <= MAX_Y) {
-    y = ny;
-  }
-}
-
 class Bullet {
-public:
+private:
   int x, y;
   int active = 0;
 
@@ -83,24 +55,26 @@ public:
   void draw() {
     gotoxy(x, y);
     setcolor(7, 0);
-    printf(".");
+    printf("|");
   }
 
-  void fire(int x, int y) {
+public:
+  bool fire(int x, int y) {
+    if (active) {
+      return 0;
+    }
     active = 1;
     this->x = x;
     this->y = y;
+    return 1;
   }
 
   void update() {
     erase();
-
-    if (y == 0) {
+    if (y-- == 0) {
       active = 0;
       return;
     }
-
-    y--;
     draw();
   }
 };
@@ -108,12 +82,9 @@ public:
 Bullet bullet[BULLET_COUNT];
 
 void fire(int x, int y) {
-  for (int i = 0; i < BULLET_COUNT; i++) {
-    if (!bullet[i].active) {
-      bullet[i].fire(x, y - 1);
+  for (int i = 0; i < BULLET_COUNT; i++)
+    if (bullet[i].fire(x, y - 1))
       break;
-    }
-  }
 }
 
 int main() {
@@ -127,31 +98,18 @@ int main() {
   do {
     if (_kbhit()) {
       ch = _getch();
-
-      if (ch == 'a') {
-        dir = -1;
-      } else if (ch == 'd') {
-        dir = 1;
-      } else if (ch == 's') {
-        dir = 0;
-      }
-
-      if (ch == ' ') {
-        fire(x, y);
-      }
-
+      if      (ch == 'a') dir = -1;
+      else if (ch == 'd') dir = 1;
+      else if (ch == 's') dir = 0;
+      if (ch == ' ') fire(x, y);
       fflush(stdin);
     }
 
-    if (dir == -1) {
-      move_ship(x, y, -1, 0);
-    } else if (dir == 1) {
-      move_ship(x, y, 1, 0);
-    }
+    if      (dir == -1) {}
+    else if (dir == 1) {}
 
-    for (int i = 0; i < BULLET_COUNT; i++) {
+    for (int i = 0; i < BULLET_COUNT; i++)
       bullet[i].update();
-    }
     
     Sleep(DTIME);
   } while (ch != 'x');
