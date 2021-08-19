@@ -8,6 +8,11 @@ void gotoxy(int x, int y) {
   SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
+void draw_star(int x, int y) {
+  gotoxy(x, y);
+  printf("*");
+}
+
 void draw_ship(int x, int y) {
   gotoxy(x, y);
   printf(" <-0-> ");
@@ -24,6 +29,14 @@ void clear_bullet(int x, int y) {
 }
 
 int main() {
+  srand(time(NULL));
+
+  for (int i = 0; i < 20; i++) {
+    int sx = rand() % 60 + 10;
+    int sy = rand() % 4 + 1;
+    draw_star(sx, sy);
+  }
+
   char ch = '.';
   int x = 38, y = 20;
   int bx, by, i;
