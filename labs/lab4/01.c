@@ -1,10 +1,11 @@
 #include <stdio.h>
+#include <string.h>
 
 int main() {
   char str[1000];
   scanf("%[^\n]", str);
 
-  for (int i = 0; str[i] != '\0'; i++) {
+  for (int i = 0; i < strlen(str); i++) {
     int n = str[i] >= '0' && str[i] <= '9' ? 0 : 1;
 
     for ( ; str[i] >= '0' && str[i] <= '9'; i++)
