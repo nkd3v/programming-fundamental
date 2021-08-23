@@ -1,16 +1,18 @@
 #include <stdio.h>
 
 int main() {
-  char str[10000];
-  fgets(str, 10000, stdin);
+  char str[1000];
+  scanf("%[^\n]", str);
 
-  for (int i = 0, n = 1; str[i]; i++, n = 1) {
-    if (str[i] >= '0' && str[i] <= '9') {
-      sscanf(str + i, "%d", &n);
-      while (str[i] >= '0' && str[i] <= '9') i++;
-    }
+  for (int i = 0; str[i] != '\0'; i++) {
+    int n = str[i] >= '0' && str[i] <= '9' ? 0 : 1;
 
-    for (int j = 0; j < n; j++)
+    for ( ; str[i] >= '0' && str[i] <= '9'; i++)
+      n = (n * 10) + (str[i] - '0');
+
+    while (n--)
       putchar(str[i]);
   }
+
+  return 0;
 }
