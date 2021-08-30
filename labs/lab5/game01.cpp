@@ -3,7 +3,6 @@
 #include <conio.h>
 
 #define DELTA_TIME 20
-
 #define SCREEN_HEIGHT 23
 #define SCREEN_WIDTH 80
 
