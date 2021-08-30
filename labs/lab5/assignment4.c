@@ -1,8 +1,10 @@
+/* GitHub URL:  */
+
 #include <windows.h>
 #include <stdio.h>
 #include <conio.h>
 
-#define DELTA_TIME 500
+#define DELTA_TIME 100
 #define SCREEN_HEIGHT 23
 #define SCREEN_WIDTH 80
 
@@ -13,23 +15,12 @@ void gotoxy(int x, int y) {
 
 void draw_ship(int x, int y) {
     gotoxy(x, y);
-    printf("<-0->");
+    printf(" <-0-> ");
 }
 
 void erase_ship(int x, int y) {
     gotoxy(x, y);
-    printf("     ");
-}
-
-void move_ship(int *x, int *y, int dx, int dy) {
-    erase_ship(*x, *y);
-
-    if (*x + dx >= 0 && *x + dx <= SCREEN_WIDTH)
-        *x += dx;
-    if (*y + dy >= 0 && *y + dy <= SCREEN_HEIGHT)
-        *y += dy;
-
-    draw_ship(*x, *y);
+    printf("       ");
 }
 
 int main() {
@@ -41,18 +32,17 @@ int main() {
         if (_kbhit()) {
             ch = _getch();
 
-            if (ch == 'w')
-                move_ship(&x, &y, 0, -1);
-            else if (ch == 's')
-                move_ship(&x, &y, 0, 1);
-            else if (ch == 'a')
-                move_ship(&x, &y, -1, 0);
-            else if (ch == 'd')
-                move_ship(&x, &y, 1, 0);
+            erase_ship(x, y);
+
+            if (ch == 'w' && y - 1 > 0) --y;
+            else if (ch == 's' && y + 1 < SCREEN_HEIGHT) ++y;
+            else if (ch == 'a' && x - 1 > 0) --x;
+            else if (ch == 'd' && x + 1 < SCREEN_WIDTH) ++x;    
+
+            draw_ship(x, y);
 
             fflush(stdin);
         }
-
         Sleep(DELTA_TIME);
     } while (ch != 'x');
 
