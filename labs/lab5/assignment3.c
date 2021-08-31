@@ -2,8 +2,14 @@
 #include <stdio.h>
 #include <conio.h>
 
-void gotoxy(int x, int y) {
-    COORD c = { (SHORT)x, (SHORT)y };
+#define DELTA_TIME 100
+#define SHIP_HEIGHT 1
+#define SHIP_WIDTH 5
+#define SCREEN_HEIGHT 23
+#define SCREEN_WIDTH 80
+
+void gotoxy(SHORT x, SHORT y) {
+    COORD c = { x, y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
@@ -21,14 +27,14 @@ int main() {
         if (_kbhit()) {
             ch = _getch();
 
-            if (ch == 'a' && x - 1 > 0)
+            if (ch == 'a' && x - 1 >= 0)
                 draw_ship(--x, y);
-            else if (ch == 'd' && x + 1 < 80)
+            else if (ch == 'd' && x + SHIP_WIDTH < 80)
                 draw_ship(++x, y);
 
             fflush(stdin);
         }
-        Sleep(100);
+        Sleep(DELTA_TIME);
     } while (ch != 'x');
 
     return 0;

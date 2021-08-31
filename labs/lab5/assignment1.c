@@ -2,8 +2,8 @@
 #include <stdio.h>
 #include <conio.h>
 
-void gotoxy(int x, int y) {
-    COORD c = { (SHORT)x, (SHORT)y };
+void gotoxy(SHORT x, SHORT y) {
+    COORD c = { x, y };
     SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
 }
 
