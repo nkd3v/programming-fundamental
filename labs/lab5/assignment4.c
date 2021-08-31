@@ -15,12 +15,12 @@ void gotoxy(SHORT x, SHORT y) {
 
 void draw_ship(int x, int y) {
     gotoxy(x, y);
-    printf(" <-0-> ");
+    printf("<-0->");
 }
 
 void erase_ship(int x, int y) {
     gotoxy(x, y);
-    printf("       ");
+    printf("     ");
 }
 
 int main() {
