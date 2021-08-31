@@ -4,7 +4,7 @@
 
 #define DELTA_TIME 100
 #define SHIP_HEIGHT 1
-#define SHIP_WIDTH 5
+#define SHIP_WIDTH 7
 #define SCREEN_HEIGHT 23
 #define SCREEN_WIDTH 80
 
@@ -27,7 +27,7 @@ int main() {
         if (_kbhit()) {
             ch = _getch();
 
-            if (ch == 'a' && x - 1 >= 0)
+            if (ch == 'a' && x - 1 > 0)
                 draw_ship(--x, y);
             else if (ch == 'd' && x + SHIP_WIDTH < 80)
                 draw_ship(++x, y);
