@@ -4,12 +4,12 @@ int grid[200][200];
 int n, m;
 
 int solve(int y, int x) {
-  if (x > n) {
-    return 1;
-  }
   if (x <= 0 || y <= 0 || y > n
       || grid[y][x] != 0) {
     return 0;
+  }
+  if (x == m) {
+    return 1;
   }
   grid[y][x] = 1;
 

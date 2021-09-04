@@ -15,7 +15,7 @@ int solve(int y, int x) {
         && nx > 0 && nx <= m
         && grid[ny][nx] == 0) {
       grid[ny][nx] = 1;
-      int found = nx > n || solve(ny, nx);
+      int found = (nx == m || solve(ny, nx));
       if (found) return found;
     }
   }
