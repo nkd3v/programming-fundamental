@@ -45,8 +45,8 @@ int main() {
     draw_ship(x, y);
 
     do {
-        if (kbhit()) {
-            ch = getch();
+        if (_kbhit()) {
+            ch = _getch();
             if (ch == 'a') d = -1;
             if (ch == 's') d = 0;
             if (ch == 'd') d = 1;

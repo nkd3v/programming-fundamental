@@ -8,22 +8,19 @@
 #define SCREEN_WIDTH 80
 #define BULLET_COUNT 5
 
+HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
+
 void setcursor(bool visible) {
-    HANDLE console = GetStdHandle(STD_OUTPUT_HANDLE);
-    CONSOLE_CURSOR_INFO lpCursor;
-    lpCursor.bVisible = visible;
-    lpCursor.dwSize = 20;
-    SetConsoleCursorInfo(console, & lpCursor);
+    CONSOLE_CURSOR_INFO lpCursor{ 20, visible };
+    SetConsoleCursorInfo(hStdout, &lpCursor);
 }
 
 void setcolor(int fg, int bg) {
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, bg * 16 + fg);
+    SetConsoleTextAttribute(hStdout, bg * 16 + fg);
 }
 
 void gotoxy(SHORT x, SHORT y) {
-    COORD c = { x, y };
-    SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), c);
+    SetConsoleCursorPosition(hStdout, { x, y });
 }
 
 void draw_ship(int x, int y) {
@@ -39,13 +36,15 @@ void erase_ship(int x, int y) {
 }
 
 struct Bullet {
-    bool active = false;
+    bool active{ 0 };
     int x, y;
 };
 
 void draw_bullet(int x, int y) {
+    setcolor(5, 0);
     gotoxy(x, y);
-    printf("|");
+    printf("^");
+    setcolor(7, 0);
 }
 
 void erase_bullet(int x, int y) {
@@ -63,27 +62,26 @@ int main() {
     Bullet bullets[BULLET_COUNT];
 
     do {
-        if (kbhit()) {
-            ch = getch();
+        if (_kbhit()) {
+            ch = _getch();
             if (ch == 'a') d = -1;
             if (ch == 's') d = 0;
             if (ch == 'd') d = 1;
-            
+
             if (ch == ' ') {
                 for (int i = 0; i < BULLET_COUNT; i++) {
-                    if (!bullets[i].active) {
-                        bullets[i].active = true;
-                        bullets[i].x = x + SHIP_WIDTH / 2;
-                        bullets[i].y = y - 1;
-                        draw_bullet(bullets[i].x, bullets[i].y);
-                        break;
-                    }
+                    if (bullets[i].active) continue;
+                    bullets[i].active = true;
+                    bullets[i].x = x + SHIP_WIDTH / 2;
+                    bullets[i].y = y - 1;
+                    draw_bullet(bullets[i].x, bullets[i].y);
+                    break;
                 }
             }
 
             fflush(stdin);
         }
-        
+
         for (int i = 0; i < BULLET_COUNT; i++) {
             if (!bullets[i].active) continue;
             erase_bullet(bullets[i].x, bullets[i].y);
@@ -93,12 +91,10 @@ int main() {
                 bullets[i].active = false;
         }
 
-        if (d != 0) {
-            erase_ship(x, y);
-            if (x + d >= 0 && (x + SHIP_WIDTH - 1) + d < SCREEN_WIDTH)
-                x += d;
-            draw_ship(x, y);
-        }
+        erase_ship(x, y);
+        if (x + d >= 0 && (x + SHIP_WIDTH - 1) + d < SCREEN_WIDTH)
+            x += d;
+        draw_ship(x, y);
 
         Sleep(100);
 

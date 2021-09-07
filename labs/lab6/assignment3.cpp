@@ -58,8 +58,8 @@ int main() {
     bool bVisible = false;
 
     do {
-        if (kbhit()) {
-            ch = getch();
+        if (_kbhit()) {
+            ch = _getch();
             if (ch == 'a') d = -1;
             if (ch == 's') d = 0;
             if (ch == 'd') d = 1;
@@ -76,7 +76,7 @@ int main() {
         
         if (bVisible) {
             erase_bullet(bx, by);
-            if (by - 1 >= 0) draw_bullet(bx, --by);
+            if (by - 1 > 0) draw_bullet(bx, --by);
             else bVisible = false;
         }
 

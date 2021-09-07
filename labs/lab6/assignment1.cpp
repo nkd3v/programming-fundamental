@@ -39,8 +39,8 @@ int main() {
     draw_ship(x, y);
 
     do {
-        if (kbhit()) {
-            ch = getch();
+        if (_kbhit()) {
+            ch = _getch();
             if (ch == 'a') {
                 erase_ship(x, y);
                 draw_ship(--x, y);
