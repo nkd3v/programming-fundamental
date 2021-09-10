@@ -8,6 +8,11 @@ int main() {
     int len = 0;
     while (s[len++]);
 
+    if (len < 2) {
+        printf("%s", s);
+        return 0;
+    }
+
     for (int i = 0; i < n; i++) {
         int j = i;
 
