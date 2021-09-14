@@ -5,12 +5,13 @@
 
 #define SHIP_WIDTH 7
 #define SCREEN_WIDTH 80
+#define DURATION 40
 
 HANDLE hStdout = GetStdHandle(STD_OUTPUT_HANDLE);
 int delayedTime = 0;
 
 void setcursor(bool visible) {
-    CONSOLE_CURSOR_INFO lpCursor{ 20, visible };
+    CONSOLE_CURSOR_INFO lpCursor { 20, visible };
     SetConsoleCursorInfo(hStdout, &lpCursor);
 }
 
@@ -50,8 +51,8 @@ void draw_bullet(int x, int y) {
     setcolor(5, 0);
     gotoxy(x, y);
     printf("^");
-    Beep(700, 50);
-    delayedTime += 50;
+    Beep(700, DURATION);
+    delayedTime += DURATION;
     setcolor(7, 0);
 }
 
@@ -64,7 +65,7 @@ void draw_star() {
     setcolor(6, 0);
     int x, y;
     do {
-        x = rand() % 61 + 10;
+        x = rand() % 60 + 10;
         y = rand() % 4 + 2;
     } while (cursor(x, y) == '*');
     gotoxy(x, y);
@@ -75,8 +76,8 @@ void draw_star() {
 void clear_star(int x, int y) {
     gotoxy(x, y);
     printf(" ");
-    Beep(1000, 50);
-    delayedTime += 50;
+    Beep(1000, DURATION);
+    delayedTime += DURATION;
 }
 
 void draw_stars(int n) {
@@ -135,15 +136,13 @@ int main() {
             clear_bullet(bx, by);
             if (by == 2) {
                 bullet = 0;
-            }
-            else {
+            } else {
                 if (cursor(bx, by - 1) == '*') {
                     clear_star(bx, by - 1);
                     bullet = 0;
                     render_score(++score);
                     draw_star();
-                }
-                else {
+                } else {
                     draw_bullet(bx, --by);
                 }
             }
