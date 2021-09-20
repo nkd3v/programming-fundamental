@@ -87,9 +87,9 @@ void draw_ship_to_buffer()
 
 void star_collision()
 {
-    if (hp == 0) return;
     for (int i = 0; i < scount; i++)
     {
+        if (hp == 0) return;
         if (star[i].X - ship.X >= 0 && star[i].X - ship.X < 7 && ship.Y - star[i].Y == 1)
         {
             star[i] = { SHORT(rand() % screen_x), 1 };
