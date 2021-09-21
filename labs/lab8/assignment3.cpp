@@ -119,7 +119,7 @@ int main() {
                 else if (eventBuffer[i].EventType == MOUSE_EVENT) {
                     MOUSE_EVENT_RECORD mer = eventBuffer[i].Event.MouseEvent;
                     if (mer.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
-                        shipColor = rand() % 255;
+                        shipColor = rand() % 16;
 
                     if (mer.dwMousePosition.X + 2 < screen_x
                         && mer.dwMousePosition.X - 2 >= 0)
