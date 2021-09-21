@@ -9,11 +9,11 @@
 HANDLE rHnd;
 HANDLE wHnd;
 DWORD fdwMode;
-COORD bufferSize { screen_x, screen_y };
-SMALL_RECT windowSize { 0, 0, screen_x - 1, screen_y - 1 };
+COORD bufferSize{ screen_x, screen_y };
+SMALL_RECT windowSize{ 0, 0, screen_x - 1, screen_y - 1 };
 CHAR_INFO consoleBuffer[screen_y][screen_x];
 COORD star[scount];
-COORD ship { 10, 12 };
+COORD ship{ 10, 12 };
 WORD shipColor = 7;
 int hp = 10;
 int delayedTime = 0;
@@ -121,8 +121,12 @@ int main() {
                     if (mer.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED)
                         shipColor = rand() % 255;
 
-                    ship.X = mer.dwMousePosition.X - 3;
-                    ship.Y = mer.dwMousePosition.Y;
+                    if (mer.dwMousePosition.X + 2 < screen_x
+                        && mer.dwMousePosition.X - 2 >= 0)
+                        ship.X = mer.dwMousePosition.X - 3;
+
+                    if (mer.dwMousePosition.Y >= 1)
+                        ship.Y = mer.dwMousePosition.Y;
                 }
             }
         }
