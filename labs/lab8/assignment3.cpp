@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <Windows.h>
 #include <time.h>
+#include <thread>
 
 #define scount 80
 #define screen_x 80
 #define screen_y 25
+#define DURATION 50
 
 HANDLE rHnd;
 HANDLE wHnd;
@@ -16,10 +18,9 @@ COORD star[scount];
 COORD ship{ 10, 12 };
 WORD shipColor = 7;
 int hp = 10;
-int delayedTime = 0;
 
 void setcursor(bool visible) {
-    CONSOLE_CURSOR_INFO lpCursor{ 20, visible };
+    CONSOLE_CURSOR_INFO lpCursor { 20, visible };
     SetConsoleCursorInfo(wHnd, &lpCursor);
 }
 
@@ -82,14 +83,13 @@ void star_collision() {
         if (star[i].X - ship.X >= 0 && star[i].X - ship.X < 7 && ship.Y - star[i].Y == 1) {
             star[i] = { SHORT(rand() % screen_x), 1 };
             hp--;
-            Beep(700, 25);
-            delayedTime += 25;
+            std::thread(Beep, 700, DURATION).detach();
         }
     }
 }
 
 void fill_num_to_buffer(int n) {
-    consoleBuffer[0][screen_x - 1] = { wchar_t('0' + n % 10), 7 };
+    consoleBuffer[0][screen_x - 1] = { WCHAR('0' + n % 10), 7 };
     if (n == 10) consoleBuffer[0][screen_x - 2] = { '1', 7 };
 }
 
@@ -104,8 +104,6 @@ int main() {
     init_star();
 
     while (play && hp > 0) {
-        delayedTime = 0;
-
         GetNumberOfConsoleInputEvents(rHnd, &numEvents);
         if (numEvents != 0) {
             ReadConsoleInput(rHnd, eventBuffer, 128, &numEventsRead);
@@ -139,13 +137,13 @@ int main() {
         fill_num_to_buffer(hp);
         fill_buffer_to_console();
 
-        Sleep(100 - delayedTime);
+        Sleep(100);
     }
 
     clear_buffer();
     fill_buffer_to_console();
     printf("GAME");
-    Beep(500, 50);
+    std::thread(Beep, 500, DURATION).detach();
 
     return 0;
 }
